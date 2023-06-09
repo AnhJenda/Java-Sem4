@@ -1,7 +1,8 @@
 package com.example.productlist.Repositories;
 
-import com.example.productlist.Product;
+import com.example.productlist.entity.Product;
 
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -10,6 +11,8 @@ import java.util.List;
     Project: ProductList
 */
 public interface ProductReporitory {
-    List<Product> getProducts(int pageNumber, int pageSize, String searchName);
-    int getTotalProducts(String searchName);
+    List<Product> gets();
+
+    /*List<Product> getProducts(int pageNumber, int pageSize, String searchName);
+    int getTotalProducts(String searchName);*/
 }

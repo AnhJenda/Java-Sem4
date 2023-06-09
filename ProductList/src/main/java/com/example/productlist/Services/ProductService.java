@@ -1,6 +1,7 @@
 package com.example.productlist.Services;
 
-import com.example.productlist.Product;
+import com.example.productlist.dto.ProductDto;
+import com.example.productlist.entity.Product;
 
 import java.util.List;
 
@@ -10,6 +11,5 @@ import java.util.List;
     Project: ProductList
 */
 public interface ProductService {
-    List<Product> getProducts(int pageNumber, int pageSize, String searchName);
-    int getTotalPages(int pageSize, String searchName);
+    List<ProductDto> getListProduct();
 }
