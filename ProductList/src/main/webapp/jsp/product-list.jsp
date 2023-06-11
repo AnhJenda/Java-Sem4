@@ -13,7 +13,7 @@
 out.println("Your IP address is: " + request.getRemoteAddr());
 %>
 
-<p>Num = ${num}</p>
+<p>Num = ${number}</p>
 
 <c:forEach var="item" items="${product}" >
     <p>Id: <c:out value="${item.id}"/> </p>
