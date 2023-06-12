@@ -13,8 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name= "productdetails", value= "/details")
-public class ProductEditController {
+public class ProductDetailsController {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
         RequestDispatcher view = request.getRequestDispatcher("details.jsp");
         view.forward(request, response);
     }

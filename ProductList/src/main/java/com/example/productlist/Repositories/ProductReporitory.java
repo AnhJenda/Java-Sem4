@@ -12,6 +12,7 @@ import java.util.List;
 */
 public interface ProductReporitory {
     List<Product> gets();
+//    List<Product> productDetails();
 
     /*List<Product> getProducts(int pageNumber, int pageSize, String searchName);
     int getTotalProducts(String searchName);*/

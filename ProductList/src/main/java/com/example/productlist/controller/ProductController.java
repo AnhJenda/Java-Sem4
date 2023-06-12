@@ -30,12 +30,14 @@ public class ProductController extends HttpServlet {
         ProductService productService = new ProductServiceImpl();
 
         // thao tác trực tiếp với entity
-//        ProductReporitory productReporitory = new ProductRepositoryImpl();
-//
-//        List<Product> productList = productReporitory.gets();
+        ProductReporitory productReporitory = new ProductRepositoryImpl();
+
+        List<Product> productList = productReporitory.gets();
 
         // thao tác qua làm dto thì không được
-        List<ProductDto> productList = productService.getListProduct();
+//        List<ProductDto> productList = productService.getListProduct();
+
+
         request.setAttribute("products", productList);
 
         int num = 2;

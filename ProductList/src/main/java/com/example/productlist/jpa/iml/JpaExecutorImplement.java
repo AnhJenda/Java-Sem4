@@ -2,9 +2,11 @@ package com.example.productlist.jpa.iml;
 
 import com.example.productlist.anotation.Column;
 import com.example.productlist.anotation.Entity;
+import com.example.productlist.anotation.Id;
 import com.example.productlist.config.DBConnection;
 import com.example.productlist.constant.SqlStatementEnum;
 import com.example.productlist.jpa.JpaExecutor;
+import com.example.productlist.jpa.exception.NoTableColumnFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -15,17 +17,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /*
     @author: Dinh Quang Anh
     Date   : 6/2/2023
     Project: ProductList
 */
-public class JpaExecutorImplement <T> implements JpaExecutor <T> {
+public class JpaExecutorImplement <T> implements JpaExecutor<T> {
     private Class<T> clazz;
     private String className;
     private String tableName;
+    private Id Id;
 
 
     public JpaExecutorImplement(Class<T> clazz){
@@ -33,6 +35,7 @@ public class JpaExecutorImplement <T> implements JpaExecutor <T> {
         this.className = clazz.getSimpleName();
         this.tableName = (clazz.getAnnotation(Entity.class) != null) ? clazz.getAnnotation(Entity.class).tablename()
                 : this.className.toLowerCase();
+        this.Id = clazz.getAnnotation(Id.class);
     }
     @Override
     public List<T> findall(){
@@ -59,6 +62,125 @@ public class JpaExecutorImplement <T> implements JpaExecutor <T> {
         }
        catch (SQLException e) {
            System.err.println(e.getMessage());
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public T getById(int id) {
+        Connection conn = null;
+        try {
+            conn = DBConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(conn == null) {
+            // todo: log
+            System.err.println("Connection is null" + conn);
+        } else {
+            System.err.println(conn);
+        }
+        String idColumn = null;
+        // get column name of id
+        for(Field f : clazz.getDeclaredFields()){
+            if (f.isAnnotationPresent(Id.class)){
+                // id is existed
+//                idColumn = f.getAnnotation(Id.class).name();
+
+                idColumn = (StringUtils.isEmpty(f.getAnnotation(Id.class).name())) ? f.getName() : f.getAnnotation(Id.class).name().trim();
+            }
+        }
+        StringBuilder statement = new StringBuilder().append(SqlStatementEnum.SELECT_ASTERISK.value)
+                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM).append(SqlStatementEnum.SPACE.value).append(tableName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.WHERE).append(SqlStatementEnum.SPACE.value).append(idColumn).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.EQUAL).append(SqlStatementEnum.QUEST);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<T> results = entityParser(rs);
+            if (results != null && results.size() > 0){
+                return results.get(0);
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return null;
+    }
+
+    @Override
+    public T getByField(String columnName, String criValue) {
+        Connection conn = null;
+        try {
+            conn = DBConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(conn == null) {
+            // todo: log
+            System.err.println("Connection is null" + conn);
+        } else {
+            System.err.println(conn);
+        }
+        String criteriaColumnName = null;
+        // get column name of id
+        for(Field f : clazz.getDeclaredFields()){
+            if (f.isAnnotationPresent(Column.class)){
+                if(f.getAnnotation(Column.class).name().trim().equals(columnName.trim())){
+                    criteriaColumnName = columnName;
+                    break;
+                }
+            }
+        }
+        if(StringUtils.isEmpty(criteriaColumnName)){
+            throw new NoTableColumnFoundException("Column name not found: " + columnName);
+        }
+        StringBuilder statement = new StringBuilder().append(SqlStatementEnum.SELECT_ASTERISK.value)
+                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM).append(SqlStatementEnum.SPACE.value).append(tableName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.WHERE).append(SqlStatementEnum.SPACE.value).append(criteriaColumnName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.EQUAL).append(criValue);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
+            preparedStatement.setString(1, criValue);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<T> results = entityParser(rs);
+            if (results != null && results.size() > 0){
+                return results.get(0);
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return null;
+    }
+
+    public List<T> findProduct(int id){
+        Connection conn = null;
+        try {
+            conn = DBConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (conn == null){
+            //todo: log
+            System.err.println("connection is null");
+        }
+        StringBuilder statement = new StringBuilder()
+                .append(SqlStatementEnum.SELECT_ASTERISK.value)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.FROM.value)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(tableName)
+                .append(SqlStatementEnum.WHERE.value)
+                .append(Id)
+                .append(SqlStatementEnum.EQUAL.value)
+                .append(id);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
+            ResultSet rs = preparedStatement.executeQuery();
+            return entityParser(rs);
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
             throw new RuntimeException();
         }
     }
