@@ -1,8 +1,11 @@
 package com.example.productlist.controller;
 
+import com.example.productlist.Repositories.ProductReporitory;
+import com.example.productlist.Repositories.iml.ProductRepositoryImpl;
 import com.example.productlist.Services.ProductService;
 import com.example.productlist.Services.impl.ProductServiceImpl;
 import com.example.productlist.dto.ProductDto;
+import com.example.productlist.entity.Product;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,6 +29,12 @@ public class ProductController extends HttpServlet {
         RequestDispatcher view = request.getRequestDispatcher("/jsp/product-list.jsp");
         ProductService productService = new ProductServiceImpl();
 
+        // thao tác trực tiếp với entity
+//        ProductReporitory productReporitory = new ProductRepositoryImpl();
+//
+//        List<Product> productList = productReporitory.gets();
+
+        // thao tác qua làm dto thì không được
         List<ProductDto> productList = productService.getListProduct();
         request.setAttribute("products", productList);
 

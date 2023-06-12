@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
     Project: ProductList
 */
 public class ProductServiceImpl implements ProductService {
-    ProductRepositoryImpl productReporitory = new ProductRepositoryImpl();
+    ProductRepositoryImpl productRepository = new ProductRepositoryImpl();
     ProductMapperImpl mapper = new ProductMapperImpl();
     @Override
     public List<ProductDto> getListProduct(){
-        return productReporitory.gets().stream().map(p -> mapper.entityToDto(p)).collect(Collectors.toList());
+        return productRepository.gets().stream().map(p -> mapper.entityToDto(p)).collect(Collectors.toList());
     }
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- configuration file for LogBack (slf4J implementation) See here for more
+	details: http://gordondickens.com/wordpress/2013/03/27/sawing-through-the-java-loggers/ -->
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <contextListener
+            class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <!-- To enable JMX Management -->
+    <jmxConfigurator />
+
+    <include
+            resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE"
+              value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}" />
+    <include
+            resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <include
+            resource="org/springframework/boot/logging/logback/file-appender.xml" />
+
+    <appender name="REQUEST_LOG_FILE_APPENDER"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/requests.log
+        </file>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/requests.%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            <!-- Mean 30 days not 30 files -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+    </appender>
+
+    <logger name="org.springframework.aop.framework.CglibAopProxy"
+            level="INFO" />
+    <logger name="org.glassfish.jersey.filter.LoggingFilter"
+            level="ERROR" />
+    <logger name="org.springframework.web" level="ERROR" />
+
+    <logger name="com.mb.lab.mbal.config.filter.RequestLogFilter"
+            level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="REQUEST_LOG_FILE_APPENDER" />
+    </logger>
+
+    <logger
+            name="com.mb.lab.mbal.business.exception.BusinessException"
+            level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- <logger name="org.springframework.web" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" /> <appender-ref ref="REQUEST_LOG_FILE_APPENDER"
+        /> </logger> -->
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

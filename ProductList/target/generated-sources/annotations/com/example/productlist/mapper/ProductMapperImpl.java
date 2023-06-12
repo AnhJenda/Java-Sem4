@@ -2,14 +2,13 @@ package com.example.productlist.mapper;
 
 import com.example.productlist.dto.ProductDto;
 import com.example.productlist.entity.Product;
+import javax.annotation.Generated;
 
-/*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-07T20:59:42+0700",
+    date = "2023-06-12T15:36:09+0700",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 18 (Oracle Corporation)"
 )
-*/
 public class ProductMapperImpl implements ProductMapper {
 
     @Override
@@ -30,6 +29,12 @@ public class ProductMapperImpl implements ProductMapper {
         }
 
         ProductDto productDto = new ProductDto();
+
+        productDto.setId( product.getId() );
+        productDto.setName( product.getName() );
+        productDto.setPrice( product.getPrice() );
+        productDto.setCategory( product.getCategory() );
+        productDto.setStatus( product.getStatus() );
 
         return productDto;
     }

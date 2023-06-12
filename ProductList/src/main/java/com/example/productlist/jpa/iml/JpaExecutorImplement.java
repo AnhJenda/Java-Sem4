@@ -87,9 +87,9 @@ public class JpaExecutorImplement <T> implements JpaExecutor <T> {
                             // todo : lam chua xong ve lam not
                             // fixme: lam sai day lam lai di
                         }
-                        entities.add(entity);
                     }
                 }
+                entities.add(entity);
             }
         }
         catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e){

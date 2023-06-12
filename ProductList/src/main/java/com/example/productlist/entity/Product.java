@@ -18,10 +18,34 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity(tablename = "product")
 public class Product {
-    @Id(name = "product_id")
+    @Id(name = "id")
     private int id;
     @Column(name = "name", dataType = SqlDataType.TEXT)
     private String name;
     @Column(name = "price", dataType = SqlDataType.DOUBLE)
     private double price;
+    @Column(name = "category", dataType = SqlDataType.TEXT)
+    private String category;
+    @Column(name = "status", dataType = SqlDataType.INTEGER)
+    private int status;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getStatus() {
+        return status;
+    }
 }

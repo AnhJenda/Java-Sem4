@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="common/admin.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,7 @@
 <h1><%= "Hello World!" %>
 </h1>
 <br/>
-<a href="/jsp/product-list.jsp">Hello Servlet</a>
+<a href="hello-servlet">Hello Servlet</a>
+<a href="./products">Product List</a>
 </body>
 </html>
