@@ -1,8 +1,6 @@
 package com.example.productlist.mapper;
 
-import com.example.productlist.dto.ProductDto;
 import com.example.productlist.dto.userDto;
-import com.example.productlist.entity.Product;
 import com.example.productlist.entity.User;
 
 /*

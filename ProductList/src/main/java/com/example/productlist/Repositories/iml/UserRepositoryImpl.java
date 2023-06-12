@@ -10,8 +10,8 @@ import com.example.productlist.jpa.iml.JpaExecutorImplement;
     Project: ProductList
 */
 public class UserRepositoryImpl extends JpaExecutorImplement<User> implements UserRepository {
-    public UserRepositoryImpl(Class<User> clazz) {
-        super(clazz);
+    public UserRepositoryImpl() {
+        super(User.class);
     }
 
     @Override

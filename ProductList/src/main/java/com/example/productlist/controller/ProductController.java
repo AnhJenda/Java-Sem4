@@ -4,7 +4,6 @@ import com.example.productlist.Repositories.ProductReporitory;
 import com.example.productlist.Repositories.iml.ProductRepositoryImpl;
 import com.example.productlist.Services.ProductService;
 import com.example.productlist.Services.impl.ProductServiceImpl;
-import com.example.productlist.dto.ProductDto;
 import com.example.productlist.entity.Product;
 
 import javax.servlet.RequestDispatcher;

@@ -40,13 +40,11 @@
             <version>2.6.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/opensymphony/sitemesh -->
-        <!-- https://mvnrepository.com/artifact/org.sitemesh/sitemesh -->
         <dependency>
             <groupId>org.sitemesh</groupId>
             <artifactId>sitemesh</artifactId>
             <version>3.0.1</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
