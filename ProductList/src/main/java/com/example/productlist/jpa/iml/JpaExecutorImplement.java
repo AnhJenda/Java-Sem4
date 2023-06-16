@@ -117,7 +117,7 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             throw new RuntimeException(e);
         }
 
-        if(conn == null) {
+        if (conn == null) {
             // todo: log
             System.err.println("Connection is null" + conn);
         } else {
@@ -125,15 +125,15 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         }
         String criteriaColumnName = null;
         // get column name of id
-        for(Field f : clazz.getDeclaredFields()){
-            if (f.isAnnotationPresent(Column.class)){
-                if(f.getAnnotation(Column.class).name().trim().equals(columnName.trim())){
+        for (Field f : clazz.getDeclaredFields()) {
+            if (f.isAnnotationPresent(Column.class)) {
+                if (f.getAnnotation(Column.class).name().trim().equals(columnName.trim())) {
                     criteriaColumnName = columnName;
                     break;
                 }
             }
         }
-        if(StringUtils.isEmpty(criteriaColumnName)){
+        if (StringUtils.isEmpty(criteriaColumnName)) {
             throw new NoTableColumnFoundException("Column name not found: " + columnName);
         }
         StringBuilder statement = new StringBuilder().append(SqlStatementEnum.SELECT_ASTERISK.value)
@@ -143,11 +143,10 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             preparedStatement.setString(1, criValue);
             ResultSet rs = preparedStatement.executeQuery();
             List<T> results = entityParser(rs);
-            if (results != null && results.size() > 0){
+            if (results != null && results.size() > 0) {
                 return results.get(0);
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException();
         }
         return null;

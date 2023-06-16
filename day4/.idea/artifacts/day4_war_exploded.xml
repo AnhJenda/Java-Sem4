@@ -13,6 +13,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="day4" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.7" />
+          <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.28" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.5" />
+        </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/day4-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />

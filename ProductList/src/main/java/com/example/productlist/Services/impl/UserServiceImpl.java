@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             throw new UserNotFoundException("");
         }
-
         return (user.getUsername().trim().equals(username) && user.getPassword().equals(password));
     }
 }
