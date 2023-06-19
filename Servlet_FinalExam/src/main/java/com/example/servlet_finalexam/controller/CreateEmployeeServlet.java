@@ -54,8 +54,6 @@ public class CreateEmployeeServlet extends HttpServlet {
         employeeDto.setPosition(position);
         employeeDto.setDepartment(department);
 
-
-
         employeeService.createEmployee(employeeDto);
         response.sendRedirect(request.getContextPath() + "/employees");
     }

@@ -9,6 +9,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="employees">Employees</a></li>
+                <li class="nav-item"><a class="nav-link" href="employees/create">Create employee</a></li>
             </ul>
         </div>
     </div>

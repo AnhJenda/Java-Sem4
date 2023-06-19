@@ -7,6 +7,7 @@ import com.example.servlet_finalexam.config.DBConnection;
 import com.example.servlet_finalexam.constant.SqlStatementEnum;
 import com.example.servlet_finalexam.entity.Employee;
 import com.example.servlet_finalexam.jpa.JpaExecutor;
+import com.mysql.cj.api.jdbc.Statement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
@@ -76,7 +77,7 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             e.printStackTrace();
         }
         if (conn == null) {
-            //todo: log
+            // todo: log
             System.err.println("connection is null");
         }
 
@@ -84,11 +85,11 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         StringBuilder columnValues = new StringBuilder();
         List<Object> params = new ArrayList<>();
 
-        // Lặp qua các trường của đối tượng Employee
+        // Loop through the fields of the Employee object
         for (Field f : employee.getClass().getDeclaredFields()) {
             if (f.isAnnotationPresent(Column.class) && !StringUtils.isEmpty(f.getAnnotation(Column.class).name())) {
                 if (f.isAnnotationPresent(Id.class)) {
-                    continue; // Bỏ qua trường Id
+                    continue; // Skip the ID field
                 }
 
                 Column columnInfo = f.getAnnotation(Column.class);
@@ -98,13 +99,13 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
                 try {
                     Object value = f.get(employee);
                     if (value != null) {
-                        // Thêm tên cột vào danh sách tên cột
+                        // Add the column name to the list of column names
                         columnNames.append(columnName).append(",");
 
-                        // Thêm giá trị của trường vào danh sách giá trị
+                        // Add the value of the field to the list of column values
                         columnValues.append("?,");
 
-                        // Thêm giá trị của trường vào danh sách các tham số
+                        // Add the value of the field to the list of parameters
                         params.add(value);
                     }
                 } catch (IllegalAccessException e) {
@@ -113,17 +114,19 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             }
         }
 
-        // Xóa dấu ',' cuối cùng trong danh sách tên cột và giá trị
+        // Remove the trailing comma from the column names and column values
         columnNames.deleteCharAt(columnNames.length() - 1);
         columnValues.deleteCharAt(columnValues.length() - 1);
 
-        // Tạo câu truy vấn INSERT
+        // Create the INSERT statement
         StringBuilder statement = new StringBuilder()
                 .append(SqlStatementEnum.INSERT_INTO.value)
+                .append(SqlStatementEnum.SPACE.value)
                 .append(tableName)
                 .append(SqlStatementEnum.OPEN_PARENTHESES.value)
                 .append(columnNames)
                 .append(SqlStatementEnum.CLOSE_PARENTHESES.value)
+                .append(SqlStatementEnum.SPACE.value)
                 .append(SqlStatementEnum.VALUES.value)
                 .append(SqlStatementEnum.OPEN_PARENTHESES.value)
                 .append(columnValues)
@@ -132,18 +135,23 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
 
-            // Đặt giá trị cho các tham số trong câu truy vấn
+            // Set the values for the parameters in the INSERT statement
             for (int i = 0; i < params.size(); i++) {
                 preparedStatement.setObject(i + 1, params.get(i));
             }
 
-            // Thực thi câu truy vấn INSERT
-            preparedStatement.executeUpdate();
+            // Execute the INSERT statement
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating employee failed, no rows affected.");
+            }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException();
         }
     }
+
 
     @Override
     public List<T> entityParser(ResultSet rs){
