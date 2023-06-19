@@ -1,22 +1,39 @@
 package com.example.jspservletsem4exercise.controller;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*
-    @author: Dinh Quang Anh
-    Date   : 6/16/2023
-    Project: jsp-servlet-sem4-exercise
-*/
 public class AuthenticationFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.err.println("do filter");
-        // todo: get access_token, decode
-        // check authen fail -> chuyển hướng tới đăng nhập lại
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
 
-        filterChain.doFilter(servletRequest, servletResponse);
+        if (isUserAuthenticated(request)) {
+
+            filterChain.doFilter(request, response);
+        } else {
+
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    private boolean isUserAuthenticated(HttpServletRequest request) {
+
+
+        return request.getSession().getAttribute("email") != null;
     }
 }

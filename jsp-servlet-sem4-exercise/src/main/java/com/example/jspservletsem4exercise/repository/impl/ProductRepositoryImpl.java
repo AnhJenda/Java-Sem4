@@ -20,11 +20,11 @@ public class ProductRepositoryImpl extends JpaExecutorImplement<Product> impleme
 
     @Override
     public List<Product> gets() {
-        return findall();
+        return super.findall();
     }
 
-//    @Override
-//    public List<Product> productDetails(){
-//        return findProduct(int id);
-//    }
+    @Override
+    public  Product getProduct(int id){
+        return super.getById(id);
+    }
 }

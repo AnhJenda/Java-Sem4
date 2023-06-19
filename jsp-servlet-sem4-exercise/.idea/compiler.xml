@@ -22,7 +22,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="jsp-servlet-sem4-exercise" target="18" />
+      <module name="jsp-servlet-sem4-exercise" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

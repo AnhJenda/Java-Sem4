@@ -1,5 +1,6 @@
 package com.example.jspservletsem4exercise.dto;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -8,7 +9,7 @@ import lombok.experimental.SuperBuilder;
     Date   : 6/16/2023
     Project: jsp-servlet-sem4-exercise
 */
-//@Data
+@Data
 @SuperBuilder
 @NoArgsConstructor
 public class ProductDto {

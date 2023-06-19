@@ -1,5 +1,6 @@
 package com.example.jspservletsem4exercise.repository;
 
+import com.example.jspservletsem4exercise.dto.ProductDto;
 import com.example.jspservletsem4exercise.entity.Product;
 
 import java.util.List;
@@ -11,8 +12,5 @@ import java.util.List;
 */
 public interface ProductReporitory {
     List<Product> gets();
-//    List<Product> productDetails();
-
-    /*List<Product> getProducts(int pageNumber, int pageSize, String searchName);
-    int getTotalProducts(String searchName);*/
+    Product getProduct(int id);
 }

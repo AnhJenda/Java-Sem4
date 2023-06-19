@@ -15,6 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,14 +87,22 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         // get column name of id
         for(Field f : clazz.getDeclaredFields()){
             if (f.isAnnotationPresent(Id.class)){
-                // id is existed
-//                idColumn = f.getAnnotation(Id.class).name();
 
                 idColumn = (StringUtils.isEmpty(f.getAnnotation(Id.class).name())) ? f.getName() : f.getAnnotation(Id.class).name().trim();
             }
         }
         StringBuilder statement = new StringBuilder().append(SqlStatementEnum.SELECT_ASTERISK.value)
-                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM).append(SqlStatementEnum.SPACE.value).append(tableName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.WHERE).append(SqlStatementEnum.SPACE.value).append(idColumn).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.EQUAL).append(SqlStatementEnum.QUEST);
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.FROM)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(tableName)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.WHERE)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(idColumn)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.EQUAL)
+                .append(SqlStatementEnum.QUEST);
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
             preparedStatement.setInt(1, id);
@@ -101,11 +111,11 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             if (results != null && results.size() > 0){
                 return results.get(0);
             }
+            return null;
         }
         catch (SQLException e) {
             throw new RuntimeException();
         }
-        return null;
     }
 
     @Override
@@ -147,13 +157,28 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
                 .append(criteriaColumnName)
                 .append(SqlStatementEnum.SPACE.value)
                 .append(SqlStatementEnum.EQUAL.value)
-                .append(SqlStatementEnum.SPACE.value)
-                .append(SqlStatementEnum.APOSTROPHE.value)
-                .append(criValue)
-                .append(SqlStatementEnum.APOSTROPHE.value);
+                .append(SqlStatementEnum.SPACE.value);
+
+        // Kiểm tra kiểu dữ liệu của criValue
+        if (StringUtils.isNumeric(criValue)) {
+            // Giá trị là số, không cần đặt trong dấu ngoặc
+            statement.append(criValue);
+        } else if (isDateValue(criValue)){
+            statement.append(SqlStatementEnum.QUEST.value);
+        }
+        else {
+            // Giá trị là chuỗi, đặt trong cặp dấu ngoặc đơn
+            statement.append(SqlStatementEnum.APOSTROPHE.value)
+                    .append(criValue)
+                    .append(SqlStatementEnum.APOSTROPHE.value);
+        }
+
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
-//            preparedStatement.setString(1, criValue);// Đặt giá trị cho tham số đầu tiên
+
+            if (isDateValue(criValue)) {
+                preparedStatement.setDate(1, parseDateValue(criValue));
+            }
             ResultSet rs = preparedStatement.executeQuery();
             List<T> results = entityParser(rs);
             if (results != null && results.size() > 0) {
@@ -165,37 +190,16 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         return null;
     }
 
-//    public List<T> findProduct(int id){
-//        Connection conn = null;
-//        try {
-//            conn = DBConnection.getInstance().getConnection();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        if (conn == null){
-//            //todo: log
-//            System.err.println("connection is null");
-//        }
-//        StringBuilder statement = new StringBuilder()
-//                .append(SqlStatementEnum.SELECT_ASTERISK.value)
-//                .append(SqlStatementEnum.SPACE.value)
-//                .append(SqlStatementEnum.FROM.value)
-//                .append(SqlStatementEnum.SPACE.value)
-//                .append(tableName)
-//                .append(SqlStatementEnum.WHERE.value)
-//                .append(Id)
-//                .append(SqlStatementEnum.EQUAL.value)
-//                .append(id);
-//        try {
-//            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
-//            ResultSet rs = preparedStatement.executeQuery();
-//            return entityParser(rs);
-//        }
-//        catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//            throw new RuntimeException();
-//        }
-//    }
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public List<T> entityParser(ResultSet rs){
@@ -218,6 +222,14 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
                                 break;
                             case BIG_INTEGER: f.set(entity, rs.getInt(columnName));
                                 break;
+                            case DATE: f.set(entity, rs.getDate(columnName));
+                                break;
+                            case FLOAT:
+                                f.set(entity, rs.getFloat(columnName));
+                                break;
+                            case SMALL_INTEGER:
+                                f.set(entity, rs.getInt(columnName));
+                                break;
                             // todo : lam chua xong ve lam not
                             // fixme: lam sai day lam lai di
                         }
@@ -230,5 +242,33 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             throw new  RuntimeException();
         }
         return entities;
+    }
+
+    private boolean isDateValue(String value) {
+        // Kiểm tra giá trị có phải là date hay không
+        // Bạn có thể sử dụng các phương thức của thư viện DateTime để kiểm tra định dạng date
+        // Ví dụ: sử dụng SimpleDateFormat để kiểm tra định dạng dd/MM/yyyy
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            dateFormat.parse(value);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private java.sql.Date parseDateValue(String value) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            // Chuyển đổi từ String sang java.util.Date
+            java.util.Date utilDate = dateFormat.parse(value);
+
+            // Chuyển đổi từ java.util.Date sang java.sql.Date
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+            return sqlDate;
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date value: " + value);
+        }
     }
 }

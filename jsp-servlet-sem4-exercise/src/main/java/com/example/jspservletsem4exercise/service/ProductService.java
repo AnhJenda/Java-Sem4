@@ -1,6 +1,7 @@
 package com.example.jspservletsem4exercise.service;
 
 import com.example.jspservletsem4exercise.dto.ProductDto;
+import com.example.jspservletsem4exercise.entity.Product;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ import java.util.List;
 */
 public interface ProductService {
     List<ProductDto> getListProduct();
+
+    ProductDto getProduct(int id);
 }

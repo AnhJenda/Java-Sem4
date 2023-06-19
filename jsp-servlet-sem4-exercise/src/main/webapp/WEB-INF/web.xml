@@ -20,21 +20,25 @@
         <servlet-name>login</servlet-name>
         <url-pattern>/login/*</url-pattern>
     </servlet-mapping>
-<!--    <filter>-->
-<!--        <filter-name>sitemesh</filter-name>-->
-<!--        <filter-class>com.example.jspservletsem4exercise.filter.SitemeshFilter</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>sitemesh</filter-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.example.jspservletsem4exercise.filter.SitemeshFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-<!--    <filter>-->
-<!--        <filter-name>authenFilter</filter-name>-->
-<!--        <filter-class>com.example.jspservletsem4exercise.controller.AuthenticationFilter</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>authenFilter</filter-name>-->
-<!--        <url-pattern>/admin/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <filter>
+        <filter-name>authenFilter</filter-name>
+        <filter-class>com.example.jspservletsem4exercise.controller.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>authenFilter</filter-name>
+        <url-pattern>/products/*</url-pattern>
+        <url-pattern>/manufacturer/*</url-pattern>
+        <url-pattern>/good-issue/*</url-pattern>
+        <url-pattern>/good-receipt/*</url-pattern>
+        <url-pattern>/warehouse/*</url-pattern>
+    </filter-mapping>
 </web-app>

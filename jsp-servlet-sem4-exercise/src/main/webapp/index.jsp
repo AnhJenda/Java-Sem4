@@ -6,10 +6,10 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
+<h1>
+    JSP-Servlet-Sem4
 </h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
-<a href="./products">Product List</a>
+<br>
+<h2>Student: Dinh Quang Anh</h2>
 </body>
 </html>
