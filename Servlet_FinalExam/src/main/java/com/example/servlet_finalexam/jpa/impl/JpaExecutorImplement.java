@@ -69,7 +69,8 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         }
     }
 
-    public void createEmployee(Employee employee) {
+    @Override
+    public void createEmployee(T employee) {
         Connection conn = null;
         try {
             conn = DBConnection.getInstance().getConnection();
@@ -81,9 +82,9 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             System.err.println("connection is null");
         }
 
-        StringBuilder columnNames = new StringBuilder();
-        StringBuilder columnValues = new StringBuilder();
-        List<Object> params = new ArrayList<>();
+        StringBuilder columnNames = new StringBuilder(); // khởi tạo danh sách tên cột
+        StringBuilder columnValues = new StringBuilder(); // khởi tạo danh sách giá trị cột
+        List<Object> params = new ArrayList<>();  // danh sách các tham số cho câu lệnh insert
 
         // Loop through the fields of the Employee object
         for (Field f : employee.getClass().getDeclaredFields()) {
@@ -93,8 +94,8 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
                 }
 
                 Column columnInfo = f.getAnnotation(Column.class);
-                String columnName = columnInfo.name();
-                f.setAccessible(true);
+                String columnName = columnInfo.name();  // lấy ra tên cột
+                f.setAccessible(true);  // cho phép truy cập vào các trường hoặc phương thức private trong reflection
 
                 try {
                     Object value = f.get(employee);
@@ -152,7 +153,6 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         }
     }
 
-
     @Override
     public List<T> entityParser(ResultSet rs){
         List<T> entities = new ArrayList<>();
@@ -196,3 +196,4 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         return entities;
     }
 }
+
