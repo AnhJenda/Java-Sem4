@@ -70,6 +70,95 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
     }
 
     @Override
+    public T getById(int id) {
+        Connection conn = null;
+        try {
+            conn = DBConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(conn == null) {
+            // todo: log
+            System.err.println("Connection is null" + conn);
+        } else {
+            System.err.println(conn);
+        }
+        String idColumn = null;
+        // get column name of id
+        for(Field f : clazz.getDeclaredFields()){
+            if (f.isAnnotationPresent(Id.class)){
+                // id is existed
+//                idColumn = f.getAnnotation(Id.class).name();
+
+                idColumn = (StringUtils.isEmpty(f.getAnnotation(Id.class).name())) ? f.getName() : f.getAnnotation(Id.class).name().trim();
+            }
+        }
+        StringBuilder statement = new StringBuilder().append(SqlStatementEnum.SELECT_ASTERISK.value)
+                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM).append(SqlStatementEnum.SPACE.value).append(tableName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.WHERE).append(SqlStatementEnum.SPACE.value).append(idColumn).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.EQUAL).append(SqlStatementEnum.QUEST);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<T> results = entityParser(rs);
+            if (results != null && results.size() > 0){
+                return results.get(0);
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException();
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteRecord(int id) {
+        Connection conn = null;
+        try {
+            conn = DBConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(conn == null) {
+            // todo: log
+            System.err.println("Connection is null" + conn);
+        } else {
+            System.err.println(conn);
+        }
+        String idColumn = null;
+        // get column name of id
+        for(Field f : clazz.getDeclaredFields()){
+            if (f.isAnnotationPresent(Id.class)){
+                // id is existed
+//                idColumn = f.getAnnotation(Id.class).name();
+
+                idColumn = (StringUtils.isEmpty(f.getAnnotation(Id.class).name())) ? f.getName() : f.getAnnotation(Id.class).name().trim();
+            }
+        }
+        StringBuilder statement = new StringBuilder()
+                .append(SqlStatementEnum.DELETE.value)
+                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM)
+                .append(SqlStatementEnum.SPACE.value).append(tableName)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.WHERE)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(idColumn).append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.EQUAL)
+                .append(SqlStatementEnum.QUEST);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
+            preparedStatement.setInt(1, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating record failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void createNewRecord(T object) {
         Connection conn = null;
         try {
@@ -146,13 +235,101 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Creating employee failed, no rows affected.");
+                throw new SQLException("creating " + tableName + " failed, no rows affected.");
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException();
         }
     }
+
+    @Override
+    public void updateRecord(int id, T object){
+        Connection conn = null;
+        try {
+            conn = DBConnection.getInstance().getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (conn == null) {
+            // todo: log
+            System.err.println("connection is null");
+        }
+        StringBuilder updateQuery = new StringBuilder(); // khởi tạo câu lệnh UPDATE
+        List<Object> params = new ArrayList<>(); // danh sách các tham số cho câu lệnh update
+
+        // Lặp qua các trường của bảng
+        for (Field f : object.getClass().getDeclaredFields()) {
+            if (f.isAnnotationPresent(Column.class) && !StringUtils.isEmpty(f.getAnnotation(Column.class).name())) {
+                if (f.isAnnotationPresent(Id.class)) {
+                    continue; // Vì Id set là auto_increment nên cần bỏ qua trường này
+                }
+
+                Column columnInfo = f.getAnnotation(Column.class);
+                String columnName = columnInfo.name();  // lấy ra tên cột
+                f.setAccessible(true);  // cho phép truy cập vào các trường hoặc phương thức private trong reflection
+
+                try {
+                    Object value = f.get(object);
+                    if (value != null) {
+                        // Thêm tên cột và giá trị vào câu lệnh UPDATE
+                        updateQuery.append(columnName).append(" = ?,");
+                        params.add(value);
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Xóa dấu ',' ở cuối câu lệnh UPDATE
+        updateQuery.deleteCharAt(updateQuery.length() - 1);
+
+        // Tạo câu lệnh UPDATE: UPDATE 'tên bảng' SET cột 1 = ?, cột 2 = ?, ... WHERE id = ?
+        StringBuilder statement = new StringBuilder()
+                .append(SqlStatementEnum.UPDATE.value)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(tableName)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.SET.value)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(updateQuery.toString())
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.WHERE.value)
+                .append(SqlStatementEnum.SPACE.value)
+                .append("id = ?");
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
+
+            // Sử dụng vòng lặp để set giá trị cho các cột
+            int paramIndex = 1;
+            for (Object param : params) {
+                preparedStatement.setObject(paramIndex, param);
+                paramIndex++;
+            }
+            // Đặt giá trị cho tham số id
+            Field idField = object.getClass().getDeclaredField("id");
+            idField.setAccessible(true);
+            Object idValue = idField.get(object);
+            preparedStatement.setObject(params.size() + 1, idValue);
+
+            // execute câu lệnh insert
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("update " + tableName + " failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public List<T> entityParser(ResultSet rs){

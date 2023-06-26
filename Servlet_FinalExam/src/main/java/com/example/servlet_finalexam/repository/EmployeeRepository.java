@@ -12,4 +12,7 @@ import java.util.List;
 public interface EmployeeRepository {
     List<Employee> gets();
     void saveEmployee(Employee employee);
+    void updateEmployee(int id, Employee employee);
+    Employee getEmployeeById(int id);
+    void deleteEmployee(int id);
 }

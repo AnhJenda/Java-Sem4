@@ -13,7 +13,14 @@ import java.util.List;
 public interface JpaExecutor <T> {
     List<T> findall();
 
+    // Create
     void createNewRecord(T object);
+    // Update
+    void updateRecord(int id, T object);
+
+    T getById(int id);
+
+    void deleteRecord(int id);
 
     List<T> entityParser(ResultSet rs);
 }

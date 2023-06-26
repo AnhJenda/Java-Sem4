@@ -27,4 +27,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = mapper.dtoToEntity(employeeDto);
         employeeRepository.saveEmployee(employee);
     }
+    @Override
+    public void updateEmployee(int id, employeeDto employeeDto){
+        Employee employee = mapper.dtoToEntity(employeeDto);
+        employeeRepository.updateEmployee(id, employee);
+    }
+    @Override
+    public employeeDto getEmployeeById(int id){
+        Employee employee = employeeRepository.getById(id);
+        return mapper.entityToDto(employee);
+    }
+    @Override
+    public  void deleteEmployee(int id){
+        employeeRepository.deleteEmployee(id);
+    }
 }
