@@ -70,7 +70,7 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
     }
 
     @Override
-    public void createEmployee(T employee) {
+    public void createNewRecord(T object) {
         Connection conn = null;
         try {
             conn = DBConnection.getInstance().getConnection();
@@ -86,11 +86,11 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         StringBuilder columnValues = new StringBuilder(); // khởi tạo danh sách giá trị cột
         List<Object> params = new ArrayList<>();  // danh sách các tham số cho câu lệnh insert
 
-        // Loop through the fields of the Employee object
-        for (Field f : employee.getClass().getDeclaredFields()) {
+        // Lặp qua các trường của bảng
+        for (Field f : object.getClass().getDeclaredFields()) {
             if (f.isAnnotationPresent(Column.class) && !StringUtils.isEmpty(f.getAnnotation(Column.class).name())) {
                 if (f.isAnnotationPresent(Id.class)) {
-                    continue; // Skip the ID field
+                    continue; // Vì Id set là auto_increment nên cần bỏ qua trường này
                 }
 
                 Column columnInfo = f.getAnnotation(Column.class);
@@ -98,15 +98,15 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
                 f.setAccessible(true);  // cho phép truy cập vào các trường hoặc phương thức private trong reflection
 
                 try {
-                    Object value = f.get(employee);
+                    Object value = f.get(object);
                     if (value != null) {
-                        // Add the column name to the list of column names
+                        // Thêm tên cột vào list cột của bảng
                         columnNames.append(columnName).append(",");
 
-                        // Add the value of the field to the list of column values
+                        // Thêm ký tự '?' đại diện cho giá trị insert của các cột
                         columnValues.append("?,");
 
-                        // Add the value of the field to the list of parameters
+                        // thêm giá trị insert vào
                         params.add(value);
                     }
                 } catch (IllegalAccessException e) {
@@ -115,11 +115,12 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             }
         }
 
-        // Remove the trailing comma from the column names and column values
+        // Xóa đi dấu ',' ở sau cột cuối cùng
         columnNames.deleteCharAt(columnNames.length() - 1);
+        // Xóa đi dấu ',' ở sau parameter cuối cùng
         columnValues.deleteCharAt(columnValues.length() - 1);
 
-        // Create the INSERT statement
+        // Tạo câu lệnh insert : Insert in to table 'tên bảng' (cột 1, cột 2, ...) values (?, ?, ...)
         StringBuilder statement = new StringBuilder()
                 .append(SqlStatementEnum.INSERT_INTO.value)
                 .append(SqlStatementEnum.SPACE.value)
@@ -136,12 +137,12 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
 
-            // Set the values for the parameters in the INSERT statement
+            // Sử dụng vòng lặp để set giá trị cho các cột
             for (int i = 0; i < params.size(); i++) {
                 preparedStatement.setObject(i + 1, params.get(i));
             }
 
-            // Execute the INSERT statement
+            // execute câu lệnh insert
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0) {

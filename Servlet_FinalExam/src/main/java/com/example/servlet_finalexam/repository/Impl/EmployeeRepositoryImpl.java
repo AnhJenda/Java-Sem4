@@ -25,6 +25,6 @@ public class EmployeeRepositoryImpl extends JpaExecutorImplement<Employee> imple
 
     @Override
     public void saveEmployee(Employee employee){
-        super.createEmployee(employee);
+        super.createNewRecord(employee);
     }
 }

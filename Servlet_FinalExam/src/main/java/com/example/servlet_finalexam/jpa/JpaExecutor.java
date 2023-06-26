@@ -13,7 +13,7 @@ import java.util.List;
 public interface JpaExecutor <T> {
     List<T> findall();
 
-    void createEmployee(T employee);
+    void createNewRecord(T object);
 
     List<T> entityParser(ResultSet rs);
 }
