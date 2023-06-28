@@ -11,7 +11,10 @@ import java.util.List;
     Project: spring-demo
 */
 public interface ProductService {
-    List<Product> getAll();
+    List<ProductDto> getAll(ProductDto criteria);  // hiếm khi lấy getall() -> phân trang -> dùng offset để phân trang trong sql
+
+    ProductDto findByProductName(String productName);
+
     Product createProduct(ProductDto productDto);
     Product updateProduct(Long id, ProductDto productDto);
     void deleteProduct(Long id);

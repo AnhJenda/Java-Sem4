@@ -23,11 +23,12 @@ public interface ProductRepositoryInterface extends JpaRepository<Product, Long>
 //    @Query("from product p where p.name = :name") // kiểu thông dụng
 
     // native query
-    @Query(value = "select * from product where name =:name", nativeQuery = true)
-    Optional<Product> findByN(@Param("name") String productName);
-//    @Query(value = "select"
+//    @Query(value = "select * from product where name =:name limit :pagesize offset :offset", nativeQuery = true)
+//    Optional<Product> findByN(@Param("name") String productName,@Param("pagesize") int pagesize,@Param("offset") int offset);
+    Optional<Product> findByProductName(String productName);
+//    @Query("select"
 //            + " new ProductStatic(p.name, pr.producer_name)"
 //            + )
-    Optional<ProductStatic> findByProductStatic(@Param("name") String productName);
+//    Optional<ProductStatic> findByProductStatic(@Param("name") String productName);
 
 }

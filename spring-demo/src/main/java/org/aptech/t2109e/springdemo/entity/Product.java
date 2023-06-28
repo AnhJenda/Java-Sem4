@@ -28,11 +28,11 @@ public class Product {
     private long price;
 
     // format
-    @Column(name = "insert_time", nullable = false)
+    @Column(name = "insert_time", nullable = true)
     private LocalDateTime insertedTime;
     @Column(name = "create_by")
     private String createBy;
-    @Column(name = "update_time", nullable = false)
+    @Column(name = "update_time", nullable = true)
     private LocalDateTime updatedTime;
     @Column(name = "update_by")
     private String updateBy;
