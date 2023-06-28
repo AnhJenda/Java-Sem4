@@ -20,7 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(tablename = "employee")
 public class Employee {
-    @Id(name = "id", dataType = SqlDataType.INTEGER)
+    @Id(name = "id")
     private int id;
     @Column(name = "fullname", dataType = SqlDataType.TEXT)
     private String fullname;

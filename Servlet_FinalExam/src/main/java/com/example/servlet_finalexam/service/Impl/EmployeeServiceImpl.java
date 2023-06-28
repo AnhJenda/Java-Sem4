@@ -34,7 +34,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override
     public employeeDto getEmployeeById(int id){
-        Employee employee = employeeRepository.getById(id);
+        Employee employee = employeeRepository.getEmployeeById(id);
         return mapper.entityToDto(employee);
     }
     @Override

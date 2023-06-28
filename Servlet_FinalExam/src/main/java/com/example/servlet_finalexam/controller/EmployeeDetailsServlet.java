@@ -1,6 +1,7 @@
 package com.example.servlet_finalexam.controller;
 
 import com.example.servlet_finalexam.dto.employeeDto;
+import com.example.servlet_finalexam.entity.Employee;
 import com.example.servlet_finalexam.service.EmployeeService;
 import com.example.servlet_finalexam.service.Impl.EmployeeServiceImpl;
 
@@ -11,25 +12,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /*
     @author: Dinh Quang Anh
-    Date   : 6/19/2023
+    Date   : 6/28/2023
     Project: Servlet_FinalExam
 */
-@WebServlet(name = "EmployeeController", value = "/employees")
-public class EmployeeController extends HttpServlet {
+@WebServlet(name = "Details", value = "/employees/details")
+public class EmployeeDetailsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        final EmployeeService employeeService = new EmployeeServiceImpl();
+        RequestDispatcher view = request.getRequestDispatcher("/jsp/employeeDetails.jsp");
 
-            RequestDispatcher view = request.getRequestDispatcher("/jsp/list.jsp");
+        String id = request.getParameter("id");
+        int parsedId = Integer.parseInt(id);
+        employeeDto employeeDto = employeeService.getEmployeeById(parsedId);
 
-            final EmployeeService employeeService = new EmployeeServiceImpl();
+        request.setAttribute("employee", employeeDto);
 
-            List<employeeDto> employees = employeeService.getListProduct();
-
-            request.setAttribute("employees", employees);
-
-            view.forward(request, response);
+        view.forward(request, response);
     }
 }

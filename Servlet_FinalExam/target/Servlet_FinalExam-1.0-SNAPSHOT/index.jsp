@@ -10,7 +10,7 @@
     JSP-Servlet-Sem4
 </h1>
 <br>
-<h2><a href="${pageContext.request.contextPath}/employees/">Employee List</a></h2>
+<h2><a href="${pageContext.request.contextPath}/employees">Employee List</a></h2>
 
 </body>
 </html>

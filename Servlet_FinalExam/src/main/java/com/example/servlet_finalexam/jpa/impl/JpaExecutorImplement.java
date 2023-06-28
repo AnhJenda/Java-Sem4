@@ -95,10 +95,10 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             }
         }
         StringBuilder statement = new StringBuilder().append(SqlStatementEnum.SELECT_ASTERISK.value)
-                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM).append(SqlStatementEnum.SPACE.value).append(tableName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.WHERE).append(SqlStatementEnum.SPACE.value).append(idColumn).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.EQUAL).append(SqlStatementEnum.QUEST);
+                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM).append(SqlStatementEnum.SPACE.value).append(tableName).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.WHERE).append(SqlStatementEnum.SPACE.value).append(idColumn).append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.EQUAL.value).append(SqlStatementEnum.QUEST.value);
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, Integer.valueOf(id));
             ResultSet rs = preparedStatement.executeQuery();
             List<T> results = entityParser(rs);
             if (results != null && results.size() > 0){
@@ -138,14 +138,17 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         }
         StringBuilder statement = new StringBuilder()
                 .append(SqlStatementEnum.DELETE.value)
-                .append(SqlStatementEnum.SPACE.value).append(SqlStatementEnum.FROM)
-                .append(SqlStatementEnum.SPACE.value).append(tableName)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.FROM)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(tableName)
                 .append(SqlStatementEnum.SPACE.value)
                 .append(SqlStatementEnum.WHERE)
                 .append(SqlStatementEnum.SPACE.value)
                 .append(idColumn).append(SqlStatementEnum.SPACE.value)
-                .append(SqlStatementEnum.EQUAL)
-                .append(SqlStatementEnum.QUEST);
+                .append(SqlStatementEnum.EQUAL.value)
+                .append(SqlStatementEnum.SPACE.value)
+                .append(SqlStatementEnum.QUEST.value);
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(statement.toString());
             preparedStatement.setInt(1, id);
@@ -308,10 +311,8 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
                 paramIndex++;
             }
             // Đặt giá trị cho tham số id
-            Field idField = object.getClass().getDeclaredField("id");
-            idField.setAccessible(true);
-            Object idValue = idField.get(object);
-            preparedStatement.setObject(params.size() + 1, idValue);
+
+            preparedStatement.setObject(params.size() + 1, id);
 
             // execute câu lệnh insert
             int affectedRows = preparedStatement.executeUpdate();
@@ -322,56 +323,63 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
-
     }
 
 
-    @Override
     public List<T> entityParser(ResultSet rs){
-        List<T> entities = new ArrayList<>();
+        List<T> entitys = new ArrayList<>();
         try {
-            while (rs.next()){
+            while(rs.next()){
                 T entity = clazz.getDeclaredConstructor().newInstance();
-                for (Field f : entity.getClass().getDeclaredFields()){
+                for(Field f : entity.getClass().getDeclaredFields()){
                     String columnName = f.getName();
-                    if (f.isAnnotationPresent(Column.class) && !StringUtils.isEmpty(f.getAnnotation(Column.class).name())){
+                    if (f.isAnnotationPresent(Id.class) && !StringUtils.isEmpty(f.getAnnotation(Id.class).name())){
+                        Id id = f.getAnnotation(Id.class);
+                        f.setAccessible(true);
+                        f.set(entity, rs.getInt(id.name()));
+                        System.err.println(entity);
+                    }
+                    if (f.isAnnotationPresent(Column.class) && !StringUtils.isEmpty(f.getAnnotation(Column.class).name())) {
                         Column columnInfo = f.getAnnotation(Column.class);
+                        //todo: chưa lấy ra được id
                         columnName = columnInfo.name();
                         f.setAccessible(true);
-                        switch (columnInfo.dataType()){
-                            case INTEGER: f.set(entity, rs.getInt(columnName));
+                        switch (columnInfo.dataType()) {
+                            case INTEGER:
+                                f.set(entity, rs.getInt(columnName));
                                 break;
-                            case TEXT: f.set(entity, rs.getString(columnName));
+                            case TEXT:
+                                f.set(entity, rs.getString(columnName));
                                 break;
-                            case DOUBLE: f.set(entity, rs.getDouble(columnName));
-                                break;
-                            case BIG_INTEGER: f.set(entity, rs.getInt(columnName));
-                                break;
-                            case DATE: f.set(entity, rs.getDate(columnName));
-                                break;
-                            case FLOAT:
-                                f.set(entity, rs.getFloat(columnName));
+                            case BIG_INTEGER:
+                                f.set(entity, rs.getInt(columnName));
                                 break;
                             case SMALL_INTEGER:
                                 f.set(entity, rs.getInt(columnName));
                                 break;
-                            // todo : lam chua xong ve lam not
-                            // fixme: lam sai day lam lai di
+                            case DATE:
+                                f.set(entity, rs.getDate(columnName));
+                                break;
+                            case FLOAT:
+                                f.set(entity, rs.getFloat(columnName));
+                                break;
+                            case DOUBLE:
+                                f.set(entity, rs.getInt(columnName));
+                                break;
+                            // todo : Làm tiếp tục với các kiểu dữ liệu còn lại
+                            // fixme: Fix nốt đê
                         }
                     }
                 }
-                entities.add(entity);
+                entitys.add(entity);
             }
         }
         catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e){
-            throw new  RuntimeException();
+            throw new RuntimeException();
         }
-        return entities;
+
+        return entitys;
     }
 }
 

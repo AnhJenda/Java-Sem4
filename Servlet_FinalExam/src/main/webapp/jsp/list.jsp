@@ -27,6 +27,7 @@
             <th scope="col">Length</th>
             <th scope="col">Width</th>
             <th scope="col">Height</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -37,6 +38,13 @@
                 <td>${item.address}</td>
                 <td>${item.position}</td>
                 <td>${item.department}</td>
+                <td>
+                    <ul style="list-style-type: none; display: flex; align-items: center;padding: 0px;">
+                        <li><a href="employees/details?id=${item.id}">Details</a></li>
+                        <li><a href="employees/update?id=${item.id}">Update</a></li>
+                        <li><a href="employees/delete?id=${item.id}">Delete</a></li>
+                    </ul>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

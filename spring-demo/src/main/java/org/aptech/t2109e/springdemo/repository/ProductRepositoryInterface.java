@@ -21,12 +21,13 @@ import java.util.Optional;
 @Repository
 public interface ProductRepositoryInterface extends JpaRepository<Product, Long>, JpaSpecificationExecutor {
 //    @Query("from product p where p.name = :name") // kiểu thông dụng
+
     // native query
     @Query(value = "select * from product where name =:name", nativeQuery = true)
     Optional<Product> findByN(@Param("name") String productName);
-    @Query(value = "select"
-            + " new ProductStatic(p.name, pr.producer_name)"
-            + )
+//    @Query(value = "select"
+//            + " new ProductStatic(p.name, pr.producer_name)"
+//            + )
     Optional<ProductStatic> findByProductStatic(@Param("name") String productName);
 
 }

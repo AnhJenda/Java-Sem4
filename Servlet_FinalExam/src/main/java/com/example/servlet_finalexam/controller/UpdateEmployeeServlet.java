@@ -24,7 +24,7 @@ import java.util.Date;
 @WebServlet(name = "UpdateEmployee", value = "/employees/update")
 public class UpdateEmployeeServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/jsp/employee.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/jsp/update.jsp");
         final EmployeeService employeeService = new EmployeeServiceImpl();
 
         String id = request.getParameter("id");
@@ -44,6 +44,7 @@ public class UpdateEmployeeServlet extends HttpServlet {
         String id = request.getParameter("id");
 
         int parsedId = Integer.parseInt(id);
+        employeeDto employeedto = employeeService.getEmployeeById(parsedId);
 
         String fullName = request.getParameter("fullname");
         String address = request.getParameter("address");
@@ -59,13 +60,12 @@ public class UpdateEmployeeServlet extends HttpServlet {
             // Xử lý lỗi chuyển đổi ngày tháng
             e.printStackTrace();
         }
-
         employeeDto employeeDto = new employeeDto();
-        employeeDto.setFullname(fullName);
-        employeeDto.setBirthday(birthday);
-        employeeDto.setAddress(address);
-        employeeDto.setPosition(position);
-        employeeDto.setDepartment(department);
+        employeeDto.setFullname(fullName != null ? fullName : employeedto.getFullname());
+        employeeDto.setBirthday(birthday != null ? birthday : employeedto.getBirthday());
+        employeeDto.setAddress(address != null ? address : employeedto.getAddress());
+        employeeDto.setPosition(position != null ? position : employeedto.getPosition());
+        employeeDto.setDepartment(department != null ? department : employeedto.getDepartment());
 
         employeeService.updateEmployee(parsedId, employeeDto);
         response.sendRedirect(request.getContextPath() + "/employees");

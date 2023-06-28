@@ -17,28 +17,17 @@ import java.io.IOException;
     Date   : 6/26/2023
     Project: Servlet_FinalExam
 */
-@WebServlet(name = "UpdateEmployee", value = "/employees/delete")
+@WebServlet(name = "DeleteServlet", value = "/employees/delete")
 public class DeleteEmployeeServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/jsp/employee.jsp");
         final EmployeeService employeeService = new EmployeeServiceImpl();
 
-        String id = request.getParameter("id");
-
-        int parsedId = Integer.parseInt(id);
-
-        employeeDto employeeDto = employeeService.getEmployeeById(parsedId);
-
-        request.setAttribute("employee", employeeDto);
-
-        view.forward(request, response);
-    }
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        final EmployeeService employeeService = new EmployeeServiceImpl();
         String id = request.getParameter("id");
 
         int parsedId = Integer.parseInt(id);
 
         employeeService.deleteEmployee(parsedId);
+
+        response.sendRedirect(request.getContextPath() + "/employees");
     }
 }
