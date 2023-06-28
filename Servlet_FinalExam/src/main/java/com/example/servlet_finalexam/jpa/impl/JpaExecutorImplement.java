@@ -151,7 +151,7 @@ public class JpaExecutorImplement <T> implements JpaExecutor<T> {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Updating record failed, no rows affected.");
+                throw new SQLException("Delete record failed");
             }
         } catch (SQLException e) {
             e.printStackTrace();

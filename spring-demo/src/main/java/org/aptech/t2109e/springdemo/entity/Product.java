@@ -1,6 +1,12 @@
 package org.aptech.t2109e.springdemo.entity;
 
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,6 +16,9 @@ import java.time.LocalDateTime;
     Project: spring-demo
 */
 @Entity(name = "product")
+@NoArgsConstructor
+@SuperBuilder
+@Data
 public class Product {
     @Id
     private long id;
@@ -27,6 +36,14 @@ public class Product {
     private LocalDateTime updatedTime;
     @Column(name = "update_by")
     private String updateBy;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "producer_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    // fetch = eager: khi persitantContext load Product thì sẽ load luôn Product.Producer
+    private Producer producer;
+
     @PrePersist
     public void beforeInsert(){
         this.insertedTime = LocalDateTime.now();
