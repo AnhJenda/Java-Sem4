@@ -25,7 +25,8 @@ public interface ProductRepositoryInterface extends JpaRepository<Product, Long>
     // native query
 //    @Query(value = "select * from product where name =:name limit :pagesize offset :offset", nativeQuery = true)
 //    Optional<Product> findByN(@Param("name") String productName,@Param("pagesize") int pagesize,@Param("offset") int offset);
-    Optional<Product> findByProductName(String productName);
+
+    Optional<Product> findByName(@Param("name") String productName);
 //    @Query("select"
 //            + " new ProductStatic(p.name, pr.producer_name)"
 //            + )

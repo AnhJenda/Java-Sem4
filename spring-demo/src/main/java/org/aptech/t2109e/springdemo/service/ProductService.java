@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductService {
     List<ProductDto> getAll(ProductDto criteria);  // hiếm khi lấy getall() -> phân trang -> dùng offset để phân trang trong sql
 
-    ProductDto findByProductName(String productName);
+    ProductDto findByName(String productName);
 
     Product createProduct(ProductDto productDto);
     Product updateProduct(Long id, ProductDto productDto);

@@ -37,8 +37,8 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public ProductDto findByProductName(String productName){
-        Optional<Product> p = productRepositoryInterface.findByProductName(productName);
+    public ProductDto findByName(String productName){
+        Optional<Product> p = productRepositoryInterface.findByName(productName);
 
         return p.isPresent() ? mapper.EntityToDto(p.get()) : null;
     }

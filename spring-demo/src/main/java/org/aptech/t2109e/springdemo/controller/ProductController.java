@@ -41,7 +41,7 @@ public class ProductController extends BaseController{
     public ResponseEntity<?> findProductByName
             (@RequestParam String productName, HttpServletRequest request){
         long startTime = System.currentTimeMillis();
-        ProductDto productDto = productService.findByProductName(productName);
+        ProductDto productDto = productService.findByName(productName);
         long endTime = System.currentTimeMillis();
         System.err.println("time process = " + (endTime - startTime));
         return ResponseEntity.ok(productDto);

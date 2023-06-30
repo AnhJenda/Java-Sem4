@@ -7,7 +7,7 @@ import com.example.servlet_finalexam.config.DBConnection;
 import com.example.servlet_finalexam.constant.SqlStatementEnum;
 import com.example.servlet_finalexam.entity.Employee;
 import com.example.servlet_finalexam.jpa.JpaExecutor;
-import com.mysql.cj.api.jdbc.Statement;
+//import com.mysql.cj.api.jdbc.Statement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
