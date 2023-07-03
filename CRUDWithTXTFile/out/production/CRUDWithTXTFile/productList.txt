@@ -1,4 +1,3 @@
 1,Dien thoai 1,Nha San Xuat 1,Dong San Pham 1,1000000
 2,Dien thoai 2,Nha San Xuat 2,Dong San Pham 2,2000000
 3,Dien thoai 3,Nha San Xuat 3,Dong San Pham 3,1500000
-4,Dien Thoai 4,Nha San Xuat 4,Dong San Pham 4,200000000

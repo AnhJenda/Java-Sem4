@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<mapstruct.version>1.5.3.Final</mapstruct.version>
+		<sitemesh.version>3.0.1</sitemesh.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -64,6 +65,20 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
 			<version>${mapstruct.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.sitemesh</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>${sitemesh.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

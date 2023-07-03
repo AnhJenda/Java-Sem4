@@ -1,0 +1,64 @@
+body {
+    font-family: Roboto;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+table {
+    margin: 0 auto;
+    text-align: left;
+}
+
+table tr th {
+    width: 20%;
+    height: 32px;
+}
+
+table tr,
+th,
+td {
+    border-bottom: 1px solid black;
+}
+
+button {
+    font-size: 16px;
+    padding: 12px 32px;
+}
+
+.container button a{
+    color: black;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    margin-top: 12px;
+}
+
+ul li {
+    margin-right: 12px;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.edit {
+    background-color: blue;
+    padding: 4px 12px;
+}
+
+.details {
+    background-color: green;
+    padding: 4px 12px;
+}
+
+.delete {
+    background: red;
+    padding: 4px 12px;
+}

@@ -70,6 +70,7 @@ public class ProductManagement {
             );
         }
     }
+
     private static void searchProduct() {
         List<Product> products = readProductsFromFile();
         if (products.isEmpty()){
@@ -189,8 +190,8 @@ public class ProductManagement {
             String line;
             while ((line = reader.readLine()) != null) { // đọc qua từng dòng
                 String[] data = line.split(","); // cắt theo dấu "," để được 1 mảng
-                int id = Integer.parseInt(data[0]); // mảng có index 0 là id
-                String name = data[1];      // mang có index 1 là name .....
+                int id = Integer.parseInt(data[0]); // phần tử có index 0 là id
+                String name = data[1];      // phần tử có index 1 là name .....
                 String manufacturer = data[2];
                 String series = data[3];
                 BigDecimal price = new BigDecimal(data[4]);

@@ -1,6 +1,7 @@
 package org.aptech.t2109e.springdemo.service.impl;
 
 import org.aptech.t2109e.springdemo.dto.ProductDto;
+import org.aptech.t2109e.springdemo.dto.ProductStatic;
 import org.aptech.t2109e.springdemo.entity.Product;
 import org.aptech.t2109e.springdemo.mapper.productMapper;
 import org.aptech.t2109e.springdemo.repository.ProductRepositoryInterface;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,32 @@ public class ProductServiceImplement implements ProductService {
                 .map(mapper :: EntityToDto)
                 .collect(Collectors.toList()); // getcontent sẽ trả ra listproduct
     }
+
+
+
+    @Override
+    public ProductDto getById(Long id){
+        // todo validate
+        return mapper.EntityToDto(productRepositoryInterface.getById(id));
+    }
+
+    @Override
+    public ProductDto save(ProductDto productDto){
+ //       productRepositoryInterface.save()  // neu khoa chinh da ton tai -> update
+
+                                                // neu khoa chinh null -> create
+        Product product = mapper.DtoToEntity(productDto);
+        if (Objects.isNull(product)){
+            return null;
+        }else {
+            Product returnEntity = productRepositoryInterface.save(product);
+            return mapper.EntityToDto(returnEntity);
+
+          //  return Optional.ofNullable(productRepositoryInterface.save(product)).map(mapper::EntityToDto).orElse(null);
+        }
+
+    }
+
 
     @Override
     public ProductDto findByName(String productName){
