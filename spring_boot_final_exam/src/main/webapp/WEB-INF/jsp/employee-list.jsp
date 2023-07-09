@@ -14,31 +14,39 @@
 </head>
 <body>
 <div class="container">
-<button><a href="create">Create new book</a></button>
+<button><a href="employee/create">Create new employee</a></button>
     <table class="table">
         <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
-            <th scope="col">Price</th>
+<%--            <th scope="col">Price</th>--%>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="item" items="${products}">
+        <c:forEach var="item" items="${employees}">
             <tr>
                 <td>${item.name}</td>
 
-                <td>${item.price}</td>
+<%--                <td>${item.price}</td>--%>
                 <td>
                     <ul style="list-style-type: none; display: flex; align-items: center;padding: 0px;">
-                        <li><a href="product?id=${item.id}">Details</a></li>
-                        <li><a href="product/update?id=${item.id}">Update</a></li>
-                        <li><a href="product/delete?id=${item.id}">Delete</a></li>
+                        <li><a href="employee?id=${item.id}">Details</a></li>
+                        <li><a href="employee/update?id=${item.id}">Update</a></li>
+                        <li><a onclick="confirmDelete(${item.id})" href="#">Delete</a></li>
                     </ul>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
+        <script>
+            function confirmDelete(id) {
+                var result = confirm("Confirm Delete?");
+                if (result) {
+                    window.location.href = "employee/delete?id=" + id;
+                }
+            }
+        </script>
     </table>
     <div>
         <c:if test="${pages.totalPages > 1}">
@@ -81,6 +89,5 @@
     </div>
 
 </div>
-
 </body>
 </html>

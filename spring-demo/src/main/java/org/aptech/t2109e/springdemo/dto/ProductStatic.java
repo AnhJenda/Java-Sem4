@@ -1,5 +1,7 @@
 package org.aptech.t2109e.springdemo.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
 /*
@@ -7,6 +9,7 @@ import java.math.BigDecimal;
     Date   : 6/26/2023
     Project: spring-demo
 */
+@Data
 public class ProductStatic {
     private String productName;
     private String producerName;

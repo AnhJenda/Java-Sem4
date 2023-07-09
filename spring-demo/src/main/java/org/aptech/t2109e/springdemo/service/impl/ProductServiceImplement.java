@@ -1,7 +1,7 @@
 package org.aptech.t2109e.springdemo.service.impl;
 
+import org.aptech.t2109e.springdemo.dto.PageDto;
 import org.aptech.t2109e.springdemo.dto.ProductDto;
-import org.aptech.t2109e.springdemo.dto.ProductStatic;
 import org.aptech.t2109e.springdemo.entity.Product;
 import org.aptech.t2109e.springdemo.mapper.productMapper;
 import org.aptech.t2109e.springdemo.repository.ProductRepositoryInterface;
@@ -28,15 +28,34 @@ public class ProductServiceImplement implements ProductService {
     private ProductRepositoryInterface productRepositoryInterface;
     @Autowired
     private productMapper mapper;
+//    @Override
+//    public List<ProductDto> getAll(ProductDto criteria){
+//        Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize());
+//        Page<Product> products = productRepositoryInterface.findAll(pageable);
+//        return products.getContent()
+//                .stream()
+//                .map(mapper :: EntityToDto)
+//                .collect(Collectors.toList()); // getcontent sẽ trả ra listproduct
+//    }
+
     @Override
-    public List<ProductDto> getAll(ProductDto criteria){
+    public PageDto<ProductDto> getAll(ProductDto criteria) {
         Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize());
         Page<Product> products = productRepositoryInterface.findAll(pageable);
-        return products.getContent()
+        List<ProductDto> productDtos = products.getContent()
                 .stream()
-                .map(mapper :: EntityToDto)
-                .collect(Collectors.toList()); // getcontent sẽ trả ra listproduct
+                .map(mapper::EntityToDto)
+                .collect(Collectors.toList());
+
+        PageDto<ProductDto> pageDto = new PageDto<>();
+        pageDto.setPageSize(products.getSize());
+        pageDto.setPageNumber(products.getNumber());
+        pageDto.setTotalPages(products.getTotalPages());
+        pageDto.setContent(productDtos);
+
+        return pageDto;
     }
+
 
 
 

@@ -26,7 +26,6 @@ public class ProductManagement {
             System.err.println("Enter choice: ");
             choice = scanner.nextInt();
             scanner.nextLine();
-
             switch (choice) {
                 case 1:
                     getListProduct();
@@ -52,9 +51,6 @@ public class ProductManagement {
 
         scanner.close();
     }
-
-
-
     private static void getListProduct(){
         List<Product> products = readProductsFromFile();
         if (products.isEmpty()){
@@ -70,7 +66,6 @@ public class ProductManagement {
             );
         }
     }
-
     private static void searchProduct() {
         List<Product> products = readProductsFromFile();
         if (products.isEmpty()){

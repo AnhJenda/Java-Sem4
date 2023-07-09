@@ -1,4 +1,4 @@
-package org.aptech.t2109e.springdemo.dto;
+package com.example.spring_boot_final_exam.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,15 +11,16 @@ import java.util.ListIterator;
 
 /*
     @author: Dinh Quang Anh
-    Date   : 6/28/2023
-    Project: spring-demo
+    Date   : 7/5/2023
+    Project: spring_boot_final_exam
 */
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public class PageDto<T> {
-    private int pageSize;
-    private int pageNumber;
+public class PageDto<T>{
+    private Integer pageSize;
+    private Integer pageNumber;
+
     private int totalPages;
     private boolean hasPreviousPage;
     private boolean hasNextPage;
@@ -59,9 +60,3 @@ public class PageDto<T> {
         this.content = content;
     }
 }
-
-//    private Integer totalPages;
-    /* int != Integer
-        Integer là object => có thể null
-        int là primative => ko nhận null (kiểu nguyên thủy) - dùng sẽ tối ưu hóa bộ nhớ hơn nhưng dùng khi chắc chắn nó not null
-     */

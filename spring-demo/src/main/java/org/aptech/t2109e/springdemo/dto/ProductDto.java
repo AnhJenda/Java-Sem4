@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class ProductDto extends PageDto {
+public class ProductDto extends PageDto<PageDto> {
     private long id;
     private String name;
     private long price;

@@ -1,6 +1,7 @@
 package org.aptech.t2109e.springdemo.controller;
 
 import org.aptech.t2109e.springdemo.config.properties.CommonProperties;
+import org.aptech.t2109e.springdemo.dto.PageDto;
 import org.aptech.t2109e.springdemo.dto.ProductDto;
 import org.aptech.t2109e.springdemo.entity.Product;
 import org.aptech.t2109e.springdemo.service.ProductService;
@@ -50,20 +51,32 @@ public class ProductController extends BaseController{
     }
 
     @GetMapping(value = "/product-list")
-    public ModelAndView gets(HttpServletRequest request){
+    public ModelAndView getProductList(HttpServletRequest request,
+                                       @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+                                       @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         ProductDto criteria = new ProductDto();
 
-        criteria.setPageSize(commonProperties.getPageSize());
-
-        criteria.setPageNumber(commonProperties.getPageNumber());
+        // Nếu không truyền paging thì lấy giá trị mặc định từ commonProperties
+        if (pageNumber == null || pageNumber < 0) {
+            criteria.setPageNumber(commonProperties.getPageNumber());
+        } else {
+            criteria.setPageNumber(pageNumber);
+        }
+        if (pageSize == null || pageSize <= 0) {
+            criteria.setPageSize(commonProperties.getPageSize());
+        } else {
+            criteria.setPageSize(pageSize);
+        }
 
         ModelAndView view = new ModelAndView("jsp/product-list");
-        List<ProductDto> productDtos = productService.getAll(criteria);
+        PageDto<ProductDto> productPage = productService.getAll(criteria);
 
+        view.addObject("products", productPage.getContent());
+        view.addObject("pages", productPage);
 
-        view.addObject("products", productDtos);
         return view;
     }
+
 
     @GetMapping("/product")
     public ModelAndView get(@RequestParam(required = false) long id, HttpServletRequest request){
