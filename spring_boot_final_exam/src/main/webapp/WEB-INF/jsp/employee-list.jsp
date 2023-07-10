@@ -15,27 +15,32 @@
 <body>
 <div class="container">
 <button><a href="employee/create">Create new employee</a></button>
+    <br>
+    <form action="employee-list" method="get">
+        <input type="text" name="name" placeholder="Search by name" />
+        <button type="submit">Search</button>
+    </form>
     <table class="table">
         <thead class="thead-dark">
-        <tr>
-            <th scope="col">Name</th>
-<%--            <th scope="col">Price</th>--%>
-            <th scope="col">Actions</th>
-        </tr>
+<%--        <tr>--%>
+<%--            <th scope="col">Name</th>--%>
+<%--            <th scope="col">Wage</th>--%>
+<%--            <th scope="col">Actions</th>--%>
+<%--        </tr>--%>
         </thead>
         <tbody>
         <c:forEach var="item" items="${employees}">
             <tr>
                 <td>${item.name}</td>
 
-<%--                <td>${item.price}</td>--%>
-                <td>
-                    <ul style="list-style-type: none; display: flex; align-items: center;padding: 0px;">
-                        <li><a href="employee?id=${item.id}">Details</a></li>
-                        <li><a href="employee/update?id=${item.id}">Update</a></li>
-                        <li><a onclick="confirmDelete(${item.id})" href="#">Delete</a></li>
-                    </ul>
-                </td>
+                <td>${item.wage}</td>
+<%--                <td>--%>
+<%--                    <ul style="list-style-type: none; display: flex; align-items: center;padding: 0px;">--%>
+<%--                        <li><a href="employee?id=${item.id}">Details</a></li>--%>
+<%--                        <li><a href="employee/update?id=${item.id}">Update</a></li>--%>
+<%--                        <li><a onclick="confirmDelete(${item.id})" href="#">Delete</a></li>--%>
+<%--                    </ul>--%>
+<%--                </td>--%>
             </tr>
         </c:forEach>
         </tbody>

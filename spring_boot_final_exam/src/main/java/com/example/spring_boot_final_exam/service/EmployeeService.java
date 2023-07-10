@@ -12,13 +12,14 @@ import com.example.spring_boot_final_exam.entity.Employee;
 public interface EmployeeService {
     PageDto<EmployeeDto> getAll(EmployeeDto criteria);
 
-    EmployeeDto getById(long id);
-
     Employee create(EmployeeDto employeeDto);
 
-    Employee update(Long id, EmployeeDto employeeDto);
+    PageDto<EmployeeDto> getAllByName(String name, EmployeeDto criteria);
 
-    void delete (Long id);
 
+//    Employee update(Long id, EmployeeDto employeeDto);
+//
+//    void delete (Long id);
+//    EmployeeDto getById(long id);
     EmployeeDto save (EmployeeDto employeeDto);
 }

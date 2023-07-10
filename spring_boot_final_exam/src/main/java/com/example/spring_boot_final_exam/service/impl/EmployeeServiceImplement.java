@@ -45,10 +45,28 @@ public class EmployeeServiceImplement implements EmployeeService {
 
         return pageDto;
     }
-    @Override
-    public EmployeeDto getById(long id){
-        return mapper.EntityToDto(employeeRepository.getById(id));
+
+    public PageDto<EmployeeDto> getAllByName(String name, EmployeeDto criteria) {
+        Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize());
+        Page<Employee> employees = employeeRepository.findByNameContainingIgnoreCase(name, pageable);
+        List<EmployeeDto> employeeDtos = employees.getContent()
+                .stream()
+                .map(mapper::EntityToDto)
+                .collect(Collectors.toList());
+
+        PageDto<EmployeeDto> pageDto = new PageDto<>();
+        pageDto.setPageSize(employees.getSize());
+        pageDto.setPageNumber(employees.getNumber());
+        pageDto.setTotalPages(employees.getTotalPages());
+        pageDto.setContent(employeeDtos);
+
+        return pageDto;
     }
+
+//    @Override
+//    public EmployeeDto getById(long id){
+//        return mapper.EntityToDto(employeeRepository.getById(id));
+//    }
 
     @Override
     public EmployeeDto save(EmployeeDto employeeDto){
@@ -68,18 +86,19 @@ public class EmployeeServiceImplement implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    @Override
-    public Employee update(Long id, EmployeeDto employeeDto){
-        Employee existingProduct = employeeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
-        Employee employee = mapper.DtoToEntity(employeeDto);
-        return employeeRepository.save(employee);
-    }
 
-    @Override
-    public void delete(Long id){
-        Employee existingProduct = employeeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
-        employeeRepository.deleteById(id);
-    }
+//    @Override
+//    public Employee update(Long id, EmployeeDto employeeDto){
+//        Employee existingProduct = employeeRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+//        Employee employee = mapper.DtoToEntity(employeeDto);
+//        return employeeRepository.save(employee);
+//    }
+//
+//    @Override
+//    public void delete(Long id){
+//        Employee existingProduct = employeeRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+//        employeeRepository.deleteById(id);
+//    }
 }

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /*
@@ -18,25 +19,10 @@ import java.time.LocalDateTime;
 @Data
 public class Employee {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "insert_time", nullable = true)
-    private LocalDateTime insertedTime;
-    @Column(name = "create_by")
-    private String createBy;
-    @Column(name = "update_time", nullable = true)
-    private LocalDateTime updatedTime;
-    @Column(name = "update_by")
-    private String updateBy;
-
-    @PrePersist
-    public void beforeInsert(){
-        this.insertedTime = LocalDateTime.now();
-        this.updatedTime = LocalDateTime.now();
-    }
-    @PreUpdate
-    public void beforeUpdate(){
-        this.updatedTime = LocalDateTime.now();
-    }
+    @Column(name = "wage", nullable = false)
+    private BigDecimal wage;
 }

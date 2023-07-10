@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /*
@@ -21,8 +22,5 @@ import java.time.LocalDateTime;
 public class EmployeeDto extends PageDto<PageDto>{
     private long id;
     private String name;
-    private LocalDateTime insertedTime = LocalDateTime.now();
-    private String createBy;
-    private LocalDateTime updatedTime = LocalDateTime.now();
-    private String updateBy;
+    private BigDecimal wage;
 }

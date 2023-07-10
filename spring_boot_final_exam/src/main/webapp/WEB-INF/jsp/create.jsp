@@ -21,8 +21,8 @@
         <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
     </div>
     <div class="form-group">
-        <label for="exampleInputPassword1">Create By</label>
-        <input type="text" name="createBy" class="form-control" id="exampleInputPassword1" placeholder="">
+        <label for="exampleInputPassword1">Wage</label>
+        <input type="text" name="wage" class="form-control" id="exampleInputPassword1" placeholder="Enter wage">
     </div>
     <div><span class="text-danger">${error}</span></div>
     <button type="submit" class="btn btn-primary">Submit</button>

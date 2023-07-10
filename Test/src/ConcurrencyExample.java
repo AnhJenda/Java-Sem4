@@ -19,7 +19,6 @@ public class ConcurrencyExample {
 
         thread1.start();
         thread2.start();
-
         try {
             thread1.join();
             thread2.join();
@@ -28,5 +27,6 @@ public class ConcurrencyExample {
         }
 
         System.out.println("Final count: " + counter.getCount());
+
     }
 }

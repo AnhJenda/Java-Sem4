@@ -5,16 +5,12 @@ import com.example.spring_boot_final_exam.config.properties.CommonProperties;
 import com.example.spring_boot_final_exam.dto.PageDto;
 import com.example.spring_boot_final_exam.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpClient;
 
 /*
     @author: Dinh Quang Anh
@@ -33,7 +29,8 @@ public class EmployeeController {
     @GetMapping(value = "/employee-list")
     public ModelAndView getProductList(HttpServletRequest request,
                                        @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-                                       @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+                                       @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                       @RequestParam(value = "name", required = false) String name) {
         EmployeeDto criteria = new EmployeeDto();
 
         // Nếu không truyền paging thì lấy giá trị mặc định từ commonProperties
@@ -48,21 +45,21 @@ public class EmployeeController {
             criteria.setPageSize(pageSize);
         }
         ModelAndView view = new ModelAndView("jsp/employee-list");
-        PageDto<EmployeeDto> employeeDtoPageDto = employeeService.getAll(criteria);
 
-        view.addObject("employees", employeeDtoPageDto.getContent());
-        view.addObject("pages", employeeDtoPageDto);
-        return view;
+        if (name != null && !name.isEmpty()){
+            PageDto<EmployeeDto> employeeDtoPageDto = employeeService.getAllByName(name, criteria);
+            view.addObject("employees", employeeDtoPageDto.getContent());
+            view.addObject("pages", employeeDtoPageDto);
+            return view;
+        } else {
+            PageDto<EmployeeDto> employeeDtoPageDto = employeeService.getAll(criteria);
+            view.addObject("employees", employeeDtoPageDto.getContent());
+            view.addObject("pages", employeeDtoPageDto);
+            return view;
+        }
     }
 
-    // details
-    @GetMapping(value = "/employee")
-    public ModelAndView getById(@RequestParam long id, HttpServletRequest request){
-        EmployeeDto employeeDto = employeeService.getById(id);
-        ModelAndView view = new ModelAndView("jsp/details");
-        view.addObject("employee", employeeDto);
-        return view;
-    }
+
 
     // create
     @GetMapping(value = "/employee/create")
@@ -83,23 +80,32 @@ public class EmployeeController {
         return new ModelAndView(new RedirectView("/employee-list", true));
     }
 
-    // update
-    @GetMapping(value = "/employee/update")
-    public ModelAndView update(@RequestParam Long id){
-        ModelAndView view = new ModelAndView("jsp/update");
-        EmployeeDto employeeDto = employeeService.getById(id);
-        view.addObject("employee", employeeDto);
-        return view;
-    }
-    @PostMapping(value = "/employee/update")
-    public ModelAndView update(@RequestParam Long id, @ModelAttribute EmployeeDto employeeDto){
-        employeeService.update(id, employeeDto);
-        return new ModelAndView(new RedirectView("/employee-list", true));
-    }
+    // details
+//    @GetMapping(value = "/employee")
+//    public ModelAndView getById(@RequestParam long id, HttpServletRequest request){
+//        EmployeeDto employeeDto = employeeService.getById(id);
+//        ModelAndView view = new ModelAndView("jsp/details");
+//        view.addObject("employee", employeeDto);
+//        return view;
+//    }
 
-    @GetMapping(value = "/employee/delete")
-    public ModelAndView delete(@RequestParam Long id){
-        employeeService.delete(id);
-        return new ModelAndView(new RedirectView("/employee-list", true));
-    }
+//    // update
+//    @GetMapping(value = "/employee/update")
+//    public ModelAndView update(@RequestParam Long id){
+//        ModelAndView view = new ModelAndView("jsp/update");
+//        EmployeeDto employeeDto = employeeService.getById(id);
+//        view.addObject("employee", employeeDto);
+//        return view;
+//    }
+//    @PostMapping(value = "/employee/update")
+//    public ModelAndView update(@RequestParam Long id, @ModelAttribute EmployeeDto employeeDto){
+//        employeeService.update(id, employeeDto);
+//        return new ModelAndView(new RedirectView("/employee-list", true));
+//    }
+//
+//    @GetMapping(value = "/employee/delete")
+//    public ModelAndView delete(@RequestParam Long id){
+//        employeeService.delete(id);
+//        return new ModelAndView(new RedirectView("/employee-list", true));
+//    }
 }
