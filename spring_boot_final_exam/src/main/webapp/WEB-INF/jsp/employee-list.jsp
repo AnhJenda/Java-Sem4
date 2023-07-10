@@ -22,11 +22,11 @@
     </form>
     <table class="table">
         <thead class="thead-dark">
-<%--        <tr>--%>
-<%--            <th scope="col">Name</th>--%>
-<%--            <th scope="col">Wage</th>--%>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Wage</th>
 <%--            <th scope="col">Actions</th>--%>
-<%--        </tr>--%>
+        </tr>
         </thead>
         <tbody>
         <c:forEach var="item" items="${employees}">
