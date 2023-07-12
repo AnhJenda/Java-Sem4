@@ -6,13 +6,13 @@ import java.math.BigDecimal;
     Project: CRUDWithTXTFile
 */
 public class Product {
-    private int id;
+    private String id;
     private String name;
     private String manufacturer;
     private String series;
     private BigDecimal price;
 
-    public Product(int id, String name, String manufacturer, String series, BigDecimal price){
+    public Product(String id, String name, String manufacturer, String series, BigDecimal price){
         this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -20,11 +20,11 @@ public class Product {
         this.price = price;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

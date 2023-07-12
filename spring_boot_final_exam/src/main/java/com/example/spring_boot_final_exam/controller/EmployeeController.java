@@ -46,29 +46,23 @@ public class EmployeeController {
         }
         ModelAndView view = new ModelAndView("jsp/employee-list");
 
-        if (name != null && !name.isEmpty()){
-            PageDto<EmployeeDto> employeeDtoPageDto = employeeService.getAllByName(name, criteria);
-            view.addObject("employees", employeeDtoPageDto.getContent());
-            view.addObject("pages", employeeDtoPageDto);
-            return view;
-        } else {
-            PageDto<EmployeeDto> employeeDtoPageDto = employeeService.getAll(criteria);
-            view.addObject("employees", employeeDtoPageDto.getContent());
-            view.addObject("pages", employeeDtoPageDto);
-            return view;
-        }
+        PageDto<EmployeeDto> employeeDtoPageDto = (name != null && !name.isEmpty()) ? employeeService.getAllByName(name, criteria)
+                : employeeService.getAll(criteria);
+        view.addObject("employees", employeeDtoPageDto.getContent());
+        view.addObject("pages", employeeDtoPageDto);
+        return view;
     }
-
 
 
     // create
     @GetMapping(value = "/employee/create")
-    public ModelAndView create(HttpServletRequest request){
+    public ModelAndView create(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("jsp/create");
         return view;
     }
+
     @PostMapping(value = "/employee/create")
-    public ModelAndView create(@ModelAttribute("employeeDto") EmployeeDto employeeDto){
+    public ModelAndView create(@ModelAttribute("employeeDto") EmployeeDto employeeDto) {
 //        ModelAndView view = new ModelAndView("jsp/create.jsp");
         if (employeeDto.getName() == null || employeeDto.getName().isEmpty()) {
             // Các trường không được để trống, xử lý lỗi tại đây
