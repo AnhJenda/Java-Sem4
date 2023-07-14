@@ -3,9 +3,12 @@ package org.aptech.t2109e.springdemo.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aptech.t2109e.springdemo.dto.ProductDto;
+import org.aptech.t2109e.springdemo.dto.RestErrorDto;
 import org.aptech.t2109e.springdemo.entity.Product;
+import org.aptech.t2109e.springdemo.exception.BusinessException;
 import org.aptech.t2109e.springdemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,26 +21,37 @@ import javax.servlet.http.HttpServletRequest;
     Project: spring-demo
 */
 @RestController
-//@RequestMapping(value = "api/v1")
-public class ProductController extends BaseController{
+@RequestMapping(value = "api/v1")
+public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
     private static Logger logger = LogManager.getLogger(ProductController.class);
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/products")
-    @GetMapping(value = "/products")    // giong ben tren nhung ngan gon hon
-    public ResponseEntity<?> gets
-            (@RequestBody ProductDto criteria, HttpServletRequest request){
-        // nếu ko truyền paging thì ăn mặc định
-        if (criteria.getPageSize() <= 0){
-            criteria.setPageSize(commonProperties.getPageSize());
-        }
-        if (criteria.getPageNumber() < 0){
-            criteria.setPageNumber(commonProperties.getPageNumber());
-        }
-        return ResponseEntity.ok(productService.getAll(criteria));
-    }
+//    @RequestMapping(method = RequestMethod.GET, value = "/products")
+//    @GetMapping(value = "/products")    // giong ben tren nhung ngan gon hon
+//    public ResponseEntity<?> gets
+//            (@RequestBody(required = false) ProductDto criteria, HttpServletRequest request){
+//        // nếu ko truyền paging thì ăn mặc định
+//        if ( criteria.getPageSize() <= 0){
+//            criteria.setPageSize(commonProperties.getPageSize());
+//        }
+//        if ( criteria.getPageNumber() < 0){
+//            criteria.setPageNumber(commonProperties.getPageNumber());
+//        }
+//        return ResponseEntity.ok(productService.getAll(criteria));
+//    }
+
+@PostMapping(value = "/products")
+public ResponseEntity<?> gets(@RequestBody ProductDto criteria, HttpServletRequest request){
+//        if (criteria.getPageSize() == null   criteria.getPageSize() <= 0) {
+//            criteria.setPageSize(commonProperties.getDefaultPageSize());
+//        }
+//        if (criteria.getPageNumber() == null  criteria.getPageNumber() < 0) {
+//            criteria.setPageNumber(commonProperties.getDefaultPageNumber());
+//        }
+    return ResponseEntity.ok(productService.getAll(criteria));
+}
 
 //    @GetMapping(value = "/findProductByName")
 //    public ResponseEntity<?> findProductByName
@@ -77,18 +91,16 @@ public class ProductController extends BaseController{
 //    }
 //
 //
-    @GetMapping("/product")
-    public ModelAndView get(@RequestParam(required = false) long id, HttpServletRequest request){
-
-        logger.info("Process = request product by productId = {}", id);
-
-        ModelAndView view = new ModelAndView("jsp/details");
-        ProductDto productDto = productService.getById(id);
-        view.addObject("product", productDto);
-        return view;
-    }
-
-
+//    @GetMapping("/product")
+//    public ModelAndView get(@RequestParam(required = false) long id, HttpServletRequest request){
+//
+//        logger.info("Process = request product by productId = {}", id);
+//
+//        ModelAndView view = new ModelAndView("jsp/details");
+//        ProductDto productDto = productService.getById(id);
+//        view.addObject("product", productDto);
+//        return view;
+//    }
 
     @PostMapping
     public Product createProduct(@RequestBody ProductDto productDto) {
@@ -106,7 +118,8 @@ public class ProductController extends BaseController{
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public ResponseEntity<?> getProductById(@PathVariable Long id) {
+        logger.info("Process = request product by productId = {}", id);
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 }

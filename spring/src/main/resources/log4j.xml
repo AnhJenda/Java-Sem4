@@ -1,6 +1,5 @@
-
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
-<log4j:configuration debug="false">
+<log4j:configuration debug="false" xmlns:log4j="">
 
     <!--Console appender -->
     <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
@@ -81,8 +80,6 @@
     <category name="com.baeldung.log4j">
         <priority value="TRACE"/>
     </category>
-
-    Văn Trịnh, [7/12/2023 6:53 PM]
     <category name="com.baeldung.log4j.Log4jRollingExample">
         <priority value="TRACE"/>
         <appender-ref ref="roll-by-size"/>

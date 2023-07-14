@@ -293,7 +293,7 @@ public class ProductManagement {
                     String series = data[3];
                     BigDecimal price = new BigDecimal(data[4]);
 
-                    if (!id.contains(" ") && !id.startsWith("//") && !name.isEmpty() && !manufacturer.isEmpty() && !series.isEmpty()) {
+                    if (!id.contains(" ") && !id.startsWith("//") && !name.trim().isEmpty() && !manufacturer.trim().isEmpty() && !series.trim().isEmpty()) {
                         Product product = new Product(id, name, manufacturer, series, price);
                         productList.add(product);
                     }

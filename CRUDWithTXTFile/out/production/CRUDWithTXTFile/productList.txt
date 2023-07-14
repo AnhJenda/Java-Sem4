@@ -1,9 +1,6 @@
-sp10001,,,,343434343
 sp10002,san pham 2,nha san xuat 2,dong san pham 2,0
 sp10003,san pham 3,nha san xuat 3,dong san pham 3,3838838.84847
 sp10004,hdgdsgds,sdkskd,djskjds,3433434.99
 3434,fdfdf,dfdfdf,fdfd3fdfd,22222
-99,fgfg,gfgff,fjffj,56574.687
-//hhhjh8,adkbsk,đss,sd,544535
-....===333   a,fggdf,bfgfg,gđgdg,56575757
+99,shdajgd,dsdjajabd,hdajshdad,3847738473
 ghdbss6sds,           gdgd    ,          ,                                     ,656556564

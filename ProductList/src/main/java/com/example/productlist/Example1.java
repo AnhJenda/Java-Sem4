@@ -37,4 +37,8 @@ public class Example1 {
             System.err.println(message);
         }
     }
+
+    public static void main(String[] args) {
+
+    }
 }

@@ -10,9 +10,8 @@ import java.sql.SQLException;
     Project: Servlet_FinalExam
 */
 public class DBConnection {
-    private static DBConnection instance = null;
     private Connection conn = null;
-
+    private static DBConnection instance = null;
     public DBConnection() {}
 
     private void init() throws SQLException {
