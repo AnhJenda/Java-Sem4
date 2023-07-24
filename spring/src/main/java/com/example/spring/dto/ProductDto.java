@@ -2,6 +2,7 @@ package com.example.spring.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -21,6 +22,7 @@ public class ProductDto  extends PageDto{
     private String createdBy;
     private LocalDateTime updatedTime;
     private String updatedBy;
+
     @JsonIgnore
     private long minPrice;
     @JsonIgnore
