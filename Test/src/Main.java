@@ -1,6 +1,4 @@
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /*
@@ -72,6 +70,26 @@ public class Main {
         System.out.println(numbers);
 
         System.out.println("Phần tử đầu tiên : " +numbers.peek());
+
+        System.out.println("-----------------Set--------------------");
+
+        Set<String> personSet = new HashSet<>();
+
+        personSet.add("person1");
+        personSet.add("person2");
+        personSet.add("person3");
+        personSet.add("person4");
+        personSet.add("person5");
+        personSet.add("person6");
+        personSet.add("person7");
+        personSet.add("person8");
+        personSet.add("person9");
+
+        for (String p : personSet){
+            System.out.println(p.hashCode());
+        }
+
+        System.out.println(personSet);
 
     }
 }
