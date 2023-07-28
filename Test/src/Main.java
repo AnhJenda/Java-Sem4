@@ -90,6 +90,51 @@ public class Main {
         }
 
         System.out.println(personSet);
+        System.out.println("-----------------TreeMap with null key---------------");
+        TreeMap<String, Integer> tm = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
+        tm.put("middle", 23);
+        tm.put(null, 24);
+        tm.put(null, 25);
+        tm.put("end", 25);
+
+        System.out.println(tm);  // null = 25, end = 25, middle = 23
+
+        System.out.println("----------ArrayList--------------");
+        ArrayList<Integer> intArr = new ArrayList<>();
+        for (int i = 1; i < 10; i++){
+            intArr.add(i);
+        }
+
+        int hashCode = System.identityHashCode(intArr);
+        System.out.println(intArr);
+        System.out.println("Địa chỉ bộ nhớ của ArrayList: " + Integer.toHexString(hashCode));
+        intArr.add(11);
+        intArr.add(12);
+        intArr.add(13);
+        intArr.add(13);
+        intArr.add(13);
+        hashCode = System.identityHashCode(intArr);
+        System.out.println(intArr);
+        System.out.println("Địa chỉ bộ nhớ của ArrayList: " + Integer.toHexString(hashCode));
+        System.out.println("-----------TreeSet with null element----------------");
+        TreeSet<Integer> personTSet = new TreeSet<>();
+        for (int i = 0; i < 10; i ++){
+            personTSet.add(i);
+        }
+        System.out.println(personTSet); // [0 -> 9]
+
+//        personTSet.add(null);
+
+        System.out.println(personTSet);  // throw NullPointerException
+
+        TreeSet<String> treeSet = new TreeSet<>();
+
+        treeSet.add("apple");
+        treeSet.add("banana");
+//        treeSet.add(null);
+        treeSet.add("orange");
+
+        System.out.println("TreeSet: " + treeSet); // throw NullPointerException
 
     }
 }

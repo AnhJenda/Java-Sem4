@@ -228,7 +228,7 @@ public class ProductManagement {
                                 if (newseries.contains(",")) {
                                     System.out.println("Wrong format! series can not contain comma");
                                 }
-                            } while (newseries.trim().length() == 0 && newseries.isEmpty() || newseries.contains(","));
+                            } while (newseries.contains(","));
 
                             do {
                                 System.out.print("Enter new price: ");
