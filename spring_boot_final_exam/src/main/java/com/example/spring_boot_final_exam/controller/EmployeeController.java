@@ -50,6 +50,8 @@ public class EmployeeController {
                 : employeeService.getAll(criteria);
         view.addObject("employees", employeeDtoPageDto.getContent());
         view.addObject("pages", employeeDtoPageDto);
+
+        System.out.println(view.getViewName());
         return view;
     }
 

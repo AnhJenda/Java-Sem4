@@ -1,5 +1,7 @@
+import java.sql.Array;
 import java.util.*;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.stream.Collectors;
 
 /*
     @author: Dinh Quang Anh
@@ -136,5 +138,40 @@ public class Main {
 
         System.out.println("TreeSet: " + treeSet); // throw NullPointerException
 
+        System.out.println("----------------array to arraylist---------");
+        int arr[] = new int[5];
+        for (int i = 0; i < arr.length; i++){
+            arr[i] = i;
+
+        }
+        System.out.println(arr); // 1 là dùng for qua arrays rồi add từng thằng vào arraylist
+                                // 2 là dùng stream để bọc -> chuyển sang kiểu Integer rồi add
+
+        // sử lý trùng lặp
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("Dat nhot");
+        strings.add("Khanh nhot");
+        strings.add("Dat nhot");
+        strings.add("Quy nhot");
+        System.out.println("List with duplicate: " + strings);
+
+        System.out.println("List unique: " + strings.stream().distinct().collect(Collectors.toList()));
+
+        System.out.println("-----------hs-------------");
+
+//        int hsList[] = new int[15];
+//
+//        for (int i = 15; i > 0; i--){
+//            hsList[i] = i;
+//        }
+//        System.out.println(hsList);
+//
+//        for (int j = 0; j < 15; j++){
+//            for (int k = 0; k < 3; k++){
+//                class.add(hsList[k]); // add 3 thằng vào class
+//                hsList.
+//            }
+//
+//        }
     }
 }
