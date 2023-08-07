@@ -48,7 +48,7 @@ public class EmployeeServiceImplement implements EmployeeService {
 
     public PageDto<EmployeeDto> getAllByName(String name, EmployeeDto criteria) {
         Pageable pageable = PageRequest.of(criteria.getPageNumber(), criteria.getPageSize());
-        Page<Employee> employees = employeeRepository.findByNameContainingIgnoreCase(name, pageable);
+        Page<Employee> employees = employeeRepository.findByNameContainingIgnoreCase(name.trim(), pageable);
         List<EmployeeDto> employeeDtos = employees.getContent()
                 .stream()
                 .map(mapper::EntityToDto)
